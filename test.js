@@ -1,12 +1,13 @@
 'use strict';
 
 const chai = require('chai');
-const ainmGaeltachta = require ('./index');
+const AinmGaeltachta = require ('./index');
 const assert = chai.assert;
 
-describe('Tástálacha `getAinmGaeltachta()`', () => {
+describe('Tástálacha `getNormalisedForm()`', () => {
     it('tuigeann sé ainm trípháirteach simplí', () => {
-        let output = ainmGaeltachta.getAinmGaeltachta(['Seán', 'Pól', 'Séamus']);
+        let output = AinmGaeltachta(['Seán', 'Pól', 'Séamus'])
+            .getNormalisedForm();
         
         assert(output == 'Seán Phóil Shéamuis', 'Níor tháinig an luach amach i gceart');
     });

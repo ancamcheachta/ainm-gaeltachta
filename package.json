@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "csv-parse": "^4.3.4"
+    "csv-parse": "^4.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "nyc": "^13.3.0",
+    "mocha": "^6.0.2"
+  },
   "scripts": {
     "test": "exit 0;"
   },
