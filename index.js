@@ -35,7 +35,7 @@ class Name {
     constructor(name) {
         this.nameRaw = name;
         this.isIrish = name in namesMap;
-        this.data = namesMap[name] || name;
+        this.data = getDataRow(name);
         this.previous = null;
         this.next = null;
     }
@@ -44,8 +44,20 @@ class Name {
         return this.isIrish;
     }
     
+    getGenerationalSuffix() {
+        throw new Error(MUST_IMPLEMENT);
+    }
+    
     getNormalisedForm() {
         throw new Error(MUST_IMPLEMENT);
+    }
+    
+    matchesChild() {
+        return this.previous && this.previous.nameRaw == this.nameRaw;
+    }
+    
+    matchesParent() {
+        return this.next && this.next.nameRaw == this.nameRaw;
     }
     
     padWithWhitespace() {
@@ -66,8 +78,19 @@ class FirstName extends Name {
         super(name);
     }
     
+    getGenerationalSuffix() {
+        return 'Beag';
+    }
+    
     getNormalisedForm() {
-        return this.data['nominitive'];
+        let normalisedForm = this.data['nominitive'];
+        let suffix = this.getGenerationalSuffix();
+        
+        if (this.matchesParent() && suffix != '') {
+            normalisedForm += ' ' + suffix;
+        }
+        
+        return normalisedForm;
     }
 }
 
@@ -76,9 +99,20 @@ class Patronym extends FirstName {
         super(name);
     }
     
+    getGenerationalSuffix() {
+        return this.data['gender'] == 'male' ? 'Bhig' :
+            this.data['gender'] == 'female' ? 'Bige' : '';
+    }
+    
     getNormalisedForm() {
-        console.log(this.getIsIrish());
-        return getLenited(this.data['genitive'], this.getIsIrish());
+        let normalisedForm = getLenited(this.data['genitive'], this.getIsIrish());
+        let suffix = this.getGenerationalSuffix();
+        
+        if (this.matchesParent() && suffix != '') {
+            normalisedForm += ' ' + suffix;
+        }
+        
+        return normalisedForm;
     }
 }
 
@@ -90,10 +124,23 @@ class AinmGaeltachta {
     getNormalisedForm() {
         let normalisedForm = '';
         
-        this.nameArray.forEach(name => normalisedForm += name.getNormalisedForm() + name.padWithWhitespace());
+        this.nameArray.forEach(name => {
+            if (!name.matchesChild()) {
+                normalisedForm += name.getNormalisedForm() + name.padWithWhitespace();
+            }
+        });
         
         return normalisedForm;
     }
+}
+
+function getDataRow(name) {
+    return namesMap[name] || {
+        nominitive: name,
+        genitive: name,
+        gender: '',
+        translations_en: ''
+    };
 }
 
 function getLenited(word, isIrish) {

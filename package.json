@@ -7,9 +7,12 @@
     "csv-parse": "^4.0.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "chai": "^4.2.0",
-    "nyc": "^13.3.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0"
   },
   "scripts": {
     "test": "exit 0;"
@@ -23,5 +26,11 @@
   "bugs": {
     "url": "https://github.com/ancamcheachta/ainm-gaeltachta/issues"
   },
-  "homepage": "https://github.com/ancamcheachta/ainm-gaeltachta#readme"
+  "homepage": "https://github.com/ancamcheachta/ainm-gaeltachta#readme",
+  "babel": {
+    "presets": [
+      "stage-3",
+      "latest"
+    ]
+  }
 }
